@@ -37,11 +37,11 @@ def vehicle_orientation(strip_angle,strip_cen_x,strip_cen_y):
         alpha=0
     # now defining velocity according to our angle
     if velocity>vel_max:
-        veocity=vel_max
+        velocity=vel_max
     else:
         velocity= ((vel_min-vel_max))/alpha_max*alpha+vel_max
     print(alpha,end='')
-        #feed alpha and velocity in Raspberry_pi
+        #feed alpha and velocity in microcontroller
 cap = cv2.VideoCapture(0)
 cap.set(3,640)
 cap.set(4,480)
