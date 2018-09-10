@@ -57,7 +57,7 @@ alpha=0
 i=0
 lower_white=np.array([0, 0, 200],dtype=np.uint8)
 upper_white=np.array([180, 255, 255],dtype=np.uint8)
-cap.set(5,5)
+cap.set(5,15)
 time.sleep(0.5)
 # processing video
 while(True):
