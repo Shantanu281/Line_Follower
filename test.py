@@ -36,8 +36,7 @@ def vehicle_orientation(strip_angle,strip_cen_x,strip_cen_y):
             i=1
         else:
             delta=delta_max*dist/320
-            alpha=delta   # and then change alpha according to distance between centres
-            i=1                      # to configure our vehicle to specific angle
+            alpha=delta   # and then change alpha according to distance between centres to configure our vehicle to specific angle
     else:
         alpha=0
     # now defining velocity according to our angle
