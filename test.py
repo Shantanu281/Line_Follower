@@ -10,28 +10,33 @@ def vehicle_orientation(strip_angle,strip_cen_x,strip_cen_y):
     dx=strip_cen_x-frame_cen_x
     dy=strip_cen_y-frame_cen_y
     dist=math.sqrt(dx**2+dy**2)
-    if dx>5:
-        if mask[frame_cen_x,frame_cen_y] == 255 or mask[frame_cen_x,0] == 255:
+    if dx>dx_min:
+        if mask[frame_cen_x,0] == 255:
             alpha=strip_angle          #just turn vehicle by strip_angle
+            i=0
+        elif mask[frame_cen_x,frame_cen_y] == 255:
+            alpha=-strip_angle
             i=0
         elif i == 0:
             delta=delta_max*dx/320
-            alpha=strip_angle+delta   #rotate by angle alpha initially
-            i=1
+            alpha=strip_angle+delta   #rotate by angle greater than angle of line to proceed in direction of line initially
+            i=1                         #line to proceed in direction of line initially
         else:
             delta=delta_max*dist/320
-            alpha=alpha-delta
-    elif dx<-5:
-        if mask[frame_cen_x,frame_cen_y] == 255 or mask[frame_cen_x,0] == 255:
+            alpha=-delta
+    elif dx<-dx_min:
+        if mask[frame_cen_x,0] == 255:
             alpha=-strip_angle          #just turn vehicle by strip_angle
             i=0
+        elif mask[frame_cen_x,frame_cen_y] == 255:
+            aplha=strip_angle
         elif i == 0:
             delta=delta_max*dx/320
             alpha=-(strip_angle+delta)   #rotate by angle alpha initially and then move along it
             i=1
         else:
             delta=delta_max*dist/320
-            alpha=alpha+alpha_def    # and then change alpha in ratio of distance
+            alpha=delta   # and then change alpha according to distance between centres
             i=1                      # to configure our vehicle to specific angle
     else:
         alpha=0
@@ -47,6 +52,7 @@ cap.set(3,640)
 cap.set(4,480)
 frame_cen_x=320
 frame_cen_y=240
+dx_min = 5
 alpha_def=0
 vel_min=0
 vel_max=100
@@ -68,7 +74,7 @@ while(True):
     #mask=cv2.bitwise_and(frame,frame,mask=mask)
     kernel=np.ones((5,5),np.uint8)
     mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,kernel)
-    mask=cv2.erode(mask,kernel,iterations=5)
+    mask=cv2.erode(mask,kernel,iterations=3)
     mask=cv2.dilate(mask,kernel,iterations=3)
     abc,mask=cv2.threshold(mask,25,255,cv2.THRESH_BINARY)
     image,contours,heirarchy=cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
