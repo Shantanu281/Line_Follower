@@ -6,10 +6,9 @@ import math
 # negative alpha means anti-clockwise rotation and vice-versa
 #
 def vehicle_orientation(strip_angle,strip_cen_x,strip_cen_y):
-    global alpha,i,velocity
+    global alpha,i,velocity,dist
     dx=strip_cen_x-frame_cen_x
     dy=strip_cen_y-frame_cen_y
-    dist=math.sqrt(dx**2+dy**2)
     if dx>dx_min:
         if mask[frame_cen_x,0] == 255:
             alpha=strip_angle          #just turn vehicle by strip_angle
@@ -20,9 +19,10 @@ def vehicle_orientation(strip_angle,strip_cen_x,strip_cen_y):
         elif i == 0:
             delta=delta_max*dx/320
             alpha=strip_angle+delta   #rotate by angle greater than angle of line to proceed in direction of line initially
-            i=1                         #line to proceed in direction of line initially
+            i=1
+            dist=math.sqrt(dx**2+dy**2)         #line to proceed in direction of line initially
         else:
-            delta=delta_max*dist/320
+            delta=delta_max/dist
             alpha=-delta
     elif dx<-dx_min:
         if mask[frame_cen_x,0] == 255:
@@ -30,12 +30,14 @@ def vehicle_orientation(strip_angle,strip_cen_x,strip_cen_y):
             i=0
         elif mask[frame_cen_x,frame_cen_y] == 255:
             aplha=strip_angle
+            i=0
         elif i == 0:
             delta=delta_max*dx/320
             alpha=-(strip_angle+delta)   #rotate by angle alpha initially and then move along it
             i=1
+            dist=math.sqrt(dx**2+dy**2)
         else:
-            delta=delta_max*dist/320
+            delta=delta_max/dist
             alpha=delta   # and then change alpha according to distance between centres to configure our vehicle to specific angle
     else:
         alpha=0
@@ -60,6 +62,7 @@ velocity = vel_max
 alpha_max=25
 alpha=0
 i=0
+dist=0
 lower_white=np.array([0, 0, 200],dtype=np.uint8)
 upper_white=np.array([180, 255, 255],dtype=np.uint8)
 cap.set(5,15)
