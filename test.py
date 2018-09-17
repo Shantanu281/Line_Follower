@@ -43,7 +43,7 @@ def vehicle_orientation(strip_angle,strip_cen_x,strip_cen_y):
         #feed alpha and velocity in microcontroller
 cap = cv2.VideoCapture(0)
 cap.set(3,640)
-cap.set(4,48)
+cap.set(4,480)
 frame_cen_x=320
 frame_cen_y=240
 dx_min = 5
